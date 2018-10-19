@@ -1,5 +1,6 @@
 package com.daniel.api.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,10 +125,35 @@ public class VehicleController {
 	}
 
 	@GetMapping("/vehicles/search")
-	public ResponseEntity<List<Vehicle>> retrieveVehiclesByMake(@RequestParam("make") String make){
-		List<Vehicle> vehicles = vehicleRepo.findByMake(make);
+	public ResponseEntity<List<Vehicle>> retrieveVehiclesByMake(
+			@RequestParam(value = "make", required = false) String make, 
+			@RequestParam(value = "year", required = false) Integer year, 
+			@RequestParam(value = "type", required = false) String type){
+		List<Vehicle> vehicles = null;
+		if(make != null && year != null) {
+			Vehicle foundVehicle = vehicleRepo.findByMakeAndYear(make, year);
+			if(foundVehicle != null) {
+				vehicles = new ArrayList<Vehicle>();
+				vehicles.add(foundVehicle);
+			}
+		}else if(make != null) {
+			if(type != null) {
+				vehicles  = vehicleRepo.findByMakeAndType(make,type);
+			} else {
+				vehicles  = vehicleRepo.findByMake(make);
+			}
+		} else if(year != null) {
+			if(type != null) {
+				vehicles  = vehicleRepo.findByYearAndType(year,type);
+			} else {
+				vehicles  = vehicleRepo.findByYear(year);
+			}
+		}else if(type != null) {
+			vehicles = vehicleRepo.findByType(type);
+		}
+		
         
-        if (vehicles.isEmpty()) {
+        if (vehicles == null || vehicles.isEmpty()) {
             throw new NotFoundException("Vehicles not found");
         }
  
@@ -250,7 +276,7 @@ public class VehicleController {
         }
  
         vehicleRepo.deleteById(id);
-        return new ResponseEntity<Vehicle>(HttpStatus.OK);
+        return new ResponseEntity<Vehicle>(HttpStatus.NO_CONTENT);
     }
 
 	@DeleteMapping("/vehicles/last")
@@ -262,7 +288,7 @@ public class VehicleController {
         }
 
         vehicleRepo.delete(foundVehicle);
-        return new ResponseEntity<Vehicle>(HttpStatus.OK);
+        return new ResponseEntity<Vehicle>(HttpStatus.NO_CONTENT);
 	}
 	
 	

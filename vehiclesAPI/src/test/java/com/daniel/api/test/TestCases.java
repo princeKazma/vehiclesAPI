@@ -1,30 +1,15 @@
 package com.daniel.api.test;
 
-import static com.jayway.restassured.RestAssured.given;
-
-import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.runners.MethodSorters;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-
-import java.util.Arrays;
- 
-import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.daniel.api.Config;
-import com.daniel.api.controllers.VehicleController;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.RequestSpecification;
@@ -35,29 +20,17 @@ import net.minidev.json.JSONObject;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Config.class, loader = AnnotationConfigWebContextLoader.class)
 @WebAppConfiguration
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestCases {
 	
-	/*@Autowired WebApplicationContext wac; 
+	private final String BASE_URI = "http://localhost:8080/vehiclesAPI/vehicles";
 	
-	private MockMvc mockMvc;
-
-    @Before
-    public void setup() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
-    }
-
-	@Test
-	public void initialEmptyVehicles() throws Exception{
-		mockMvc.perform(get("/vehicles"))
-        .andExpect(status().isNotFound());
-	}*/
-
-	private String baseURI = "http://localhost/vehicles";
+	
 	// Test that H2 database gets empty created initially and find empty list of vehicles
-	// when retrieving all vehicles, with custom 404 status
+	// when retrieving all vehicles, with retrieved custom 404 status
 	@Test
-	public void initialEmptyVehiclesAnd404() {
-		RestAssured.baseURI = baseURI;
+	public void test1_initialEmptyVehicles() {
+		RestAssured.baseURI = BASE_URI;
 		RequestSpecification request = RestAssured.given();
 
 		Response response = request.get();
@@ -68,9 +41,10 @@ public class TestCases {
 		Assert.assertEquals( "Vehicles not found", bodyMessage);
 	}
 
+	// Create a Vehicle of type Car and get an Status of 201
 	@Test
-	public void createCarVehicle() {
-		RestAssured.baseURI = baseURI;
+	public void test2_createCarVehicle() {
+		RestAssured.baseURI = BASE_URI;
 		RequestSpecification request = RestAssured.given();
 		
 		JSONObject requestParams = new JSONObject();
@@ -89,9 +63,10 @@ public class TestCases {
 		Assert.assertEquals(statusCode, 201);
 	}
 
+	// Send an object of Car, and an Id path param of 1, to update the vehicle created before; expect a 200
 	@Test
-	public void updateVehicle() {
-		RestAssured.baseURI = baseURI;
+	public void test3_updateVehicle() {
+		RestAssured.baseURI = BASE_URI;
 		RequestSpecification request = RestAssured.given();
 		
 		JSONObject requestParams = new JSONObject();
@@ -109,9 +84,10 @@ public class TestCases {
 		Assert.assertEquals(statusCode, 200);
 	}
 
+	// Create a new Vehicle, this time of type Truck, expect a 201
 	@Test
-	public void createTruckVehicle() {
-		RestAssured.baseURI = baseURI;
+	public void test4_createTruckVehicle() {
+		RestAssured.baseURI = BASE_URI;
 		RequestSpecification request = RestAssured.given();
 		
 		JSONObject requestParams = new JSONObject();
@@ -131,27 +107,43 @@ public class TestCases {
 		Assert.assertEquals(statusCode, 201);
 	}
 	
+	// Get all vehicles, check it has a Car and a Truck in the list, and expect a 200
 	@Test
-	public void retrieveAllTypeOfVehicles() {
-		RestAssured.baseURI = baseURI;
+	public void test5_retrieveAllTypeOfVehicles() {
+		RestAssured.baseURI = BASE_URI;
 		RequestSpecification request = RestAssured.given();
 
 		Response response = request.get();
 		
 		int statusCode = response.getStatusCode();
 		Assert.assertEquals(statusCode, 200);
-		response.then().body("", hasItems("CAR", "TRUCK"));
+		//response.then().body("", hasItems("CAR", "TRUCK"));
+		String bodyAsString = response.getBody().asString();
+		Assert.assertEquals(bodyAsString.contains("CAR"), true);
+		Assert.assertEquals(bodyAsString.contains("TRUCK"), true);
 	}
 
+	// Delete the last created Truck Vehicle, expect a 200
 	@Test
-	public void deleteTruck() {
-		RestAssured.baseURI = baseURI;
+	public void test6_deleteTruck() {
+		RestAssured.baseURI = BASE_URI;
+		RequestSpecification request = RestAssured.given();
+
+		Response response = request.delete("/last");
+		
+		int statusCode = response.getStatusCode();
+		Assert.assertEquals(statusCode, 204);
+	}
+
+	// Delete the Car vehicle, found by Id param, expect a 200
+	@Test
+	public void test7_deleteCar() {
+		RestAssured.baseURI = BASE_URI;
 		RequestSpecification request = RestAssured.given();
 
 		Response response = request.delete("/1");
 		
 		int statusCode = response.getStatusCode();
-		Assert.assertEquals(statusCode, 200);
+		Assert.assertEquals(statusCode, 204);
 	}
-
 }
