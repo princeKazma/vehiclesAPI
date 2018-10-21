@@ -1,6 +1,7 @@
 package com.daniel.api.test;
 
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -21,7 +22,7 @@ import net.minidev.json.JSONObject;
 @ContextConfiguration(classes = Config.class, loader = AnnotationConfigWebContextLoader.class)
 @WebAppConfiguration
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestCases {
+@Ignore public class TestCases {
 	
 	private final String BASE_URI = "http://localhost:8080/vehiclesAPI/vehicles";
 	

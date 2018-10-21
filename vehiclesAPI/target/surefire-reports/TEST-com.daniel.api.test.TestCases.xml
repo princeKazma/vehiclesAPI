@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="7" failures="0" name="com.daniel.api.test.TestCases" time="8.629" errors="0" skipped="0">
+<testsuite tests="1" failures="0" name="com.daniel.api.test.TestCases" time="0.022" errors="0" skipped="1">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib"/>
@@ -27,7 +27,7 @@
 "/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="os.name" value="Mac OS X"/>
-    <property name="classworlds.conf" value="/Users/daniel/eclipse-workspace/.metadata/.plugins/org.eclipse.m2e.launching/launches/m2conf8715607125600306534.tmp"/>
+    <property name="classworlds.conf" value="/Users/daniel/eclipse-workspace/.metadata/.plugins/org.eclipse.m2e.launching/launches/m2conf4483236196695491773.tmp"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
     <property name="java.library.path" value="/Users/daniel/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
@@ -63,11 +63,7 @@
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase classname="com.daniel.api.test.TestCases" name="test1_initialEmptyVehicles" time="7.383"/>
-  <testcase classname="com.daniel.api.test.TestCases" name="test2_createCarVehicle" time="0.701"/>
-  <testcase classname="com.daniel.api.test.TestCases" name="test3_updateVehicle" time="0.265"/>
-  <testcase classname="com.daniel.api.test.TestCases" name="test4_createTruckVehicle" time="0.075"/>
-  <testcase classname="com.daniel.api.test.TestCases" name="test5_retrieveAllTypeOfVehicles" time="0.064"/>
-  <testcase classname="com.daniel.api.test.TestCases" name="test6_deleteTruck" time="0.089"/>
-  <testcase classname="com.daniel.api.test.TestCases" name="test7_deleteCar" time="0.052"/>
+  <testcase classname="com.daniel.api.test.TestCases" name="com.daniel.api.test.TestCases" time="0.022">
+    <skipped/>
+  </testcase>
 </testsuite>

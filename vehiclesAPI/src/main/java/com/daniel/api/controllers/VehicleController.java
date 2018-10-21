@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +23,6 @@ import com.daniel.api.entities.Car;
 import com.daniel.api.entities.Drone;
 import com.daniel.api.entities.Truck;
 import com.daniel.api.entities.Vehicle;
-import com.daniel.api.handlers.ExceptionResponse;
 import com.daniel.api.handlers.NotFoundException;
 
 @RestController
@@ -33,9 +31,6 @@ public class VehicleController {
 	@Autowired
 	private VehicleRepository vehicleRepo;
 
-	//@Autowired
-	//private CarRepository carRepo;
-	
 	@GetMapping("/vehicles")
 	public ResponseEntity<List<Vehicle>> retrieveVehicles(){
 		List<Vehicle> vehicles = vehicleRepo.findAll();
@@ -291,19 +286,5 @@ public class VehicleController {
         return new ResponseEntity<Vehicle>(HttpStatus.NO_CONTENT);
 	}
 	
-	
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ExceptionResponse> handleGlobalException(Exception exc){
-		ExceptionResponse response = new ExceptionResponse(HttpStatus.CONFLICT.value(), exc.getMessage());
-		
-		return new ResponseEntity<ExceptionResponse>(response, HttpStatus.CONFLICT);
-	}
-
-	@ExceptionHandler(NotFoundException.class)
-	public ResponseEntity<ExceptionResponse> handleNotFoundException(NotFoundException exc){
-		ExceptionResponse response = new ExceptionResponse(HttpStatus.NOT_FOUND.value(), exc.getMessage());
-		
-		return new ResponseEntity<ExceptionResponse>(response, HttpStatus.NOT_FOUND);
-	}
 	
 }

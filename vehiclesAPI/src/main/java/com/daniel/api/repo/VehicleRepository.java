@@ -7,8 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import com.daniel.api.entities.Vehicle;
 
-//@NoRepositoryBean
-//public interface VehicleRepository<T extends Vehicle> extends JpaRepository<T, Long>{
 @Repository
 public interface VehicleRepository extends JpaRepository<Vehicle, Long>{
 

@@ -4,7 +4,7 @@
 /Users/daniel/eclipse-workspace/vehiclesAPI/src/main/java/com/daniel/api/entities/Car.java
 /Users/daniel/eclipse-workspace/vehiclesAPI/src/main/java/com/daniel/api/DispatcherServletInitializer.java
 /Users/daniel/eclipse-workspace/vehiclesAPI/src/main/java/com/daniel/api/entities/Drone.java
-/Users/daniel/eclipse-workspace/vehiclesAPI/src/main/java/com/daniel/api/Demo.java
+/Users/daniel/eclipse-workspace/vehiclesAPI/src/main/java/com/daniel/api/handlers/ExceptionAdviceHandler.java
 /Users/daniel/eclipse-workspace/vehiclesAPI/src/main/java/com/daniel/api/controllers/VehicleController.java
 /Users/daniel/eclipse-workspace/vehiclesAPI/src/main/java/com/daniel/api/handlers/ExceptionResponse.java
 /Users/daniel/eclipse-workspace/vehiclesAPI/src/main/java/com/daniel/api/handlers/NotFoundException.java

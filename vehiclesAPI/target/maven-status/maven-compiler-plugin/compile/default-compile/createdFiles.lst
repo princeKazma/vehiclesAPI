@@ -4,7 +4,6 @@ com/daniel/api/entities/Boat.class
 com/daniel/api/entities/Airplane.class
 com/daniel/api/DispatcherServletInitializer.class
 com/daniel/api/Config.class
-com/daniel/api/Demo.class
 com/daniel/api/entities/Truck.class
 com/daniel/api/entities/Amphibious.class
 com/daniel/api/repo/VehicleRepository.class
