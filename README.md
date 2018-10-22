@@ -367,7 +367,7 @@ PUT Methods: (receive RequestBody)
 - URI: /vehicles/{id}
   Description: This methods receives an ID of vehicle from the URI, as well as a Vehicle Object through RequestBody, 
   to update properties on an existing Vehicle with the ID given. If there is no Vehicle with a matching ID, 
-  an Exception, and a 404, will be returned in a ResponseEntity.
+  a new Vehicle would be created based on its type property.
   · Request example:
   {
     "make": "Ford",
@@ -398,11 +398,12 @@ PUT Methods: (receive RequestBody)
 
 DELETE Methods:
 - URI: /vehicles/{id}
-  Description: This method deletes one Vehicle matching the given ID. If there is not match, it will return an Exception and a 404.
+  Description: This method deletes one Vehicle matching the given ID. If there is not match, it will still return a 204 (No Content).
   · Response:
-  Don't expect a body response, but expect a 204 for a sucessful delete, and a 404 if Id is not found.
+  Don't expect a body response, but expect a 204.
 
 - URI: /vehicles/last
   Description: Without receiving any parameter, the last Vehicle saved in the Database will be deleted, no matter the type of the Vehicle.
+  Even if there are no vehicles, it will still return a 204 (No Content).
   · Response:
-  Don't expect a body response, but expect a 204 for a sucessful delete, and a 404 if no vehicles are found.
+  Don't expect a body response, but expect a 204.
