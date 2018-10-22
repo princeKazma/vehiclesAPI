@@ -26,6 +26,16 @@ public class Airplane extends Vehicle {
 		this.isPrivate = vehicle.isPrivate();
 	}
 
+	public Airplane(Vehicle vehicle) {
+		super();
+		this.type = "AIRPLANE";
+		this.capacity = vehicle.getCapacity();
+		this.color = vehicle.getColor();
+		this.make = vehicle.getMake();
+		this.wheels = vehicle.getWheels();
+		this.year = vehicle.getYear();
+	}
+
 	public int getMaxFlightHeight() {
 		return maxFlightHeight;
 	}

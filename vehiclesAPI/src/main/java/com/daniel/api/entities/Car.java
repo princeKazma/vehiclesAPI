@@ -23,6 +23,17 @@ public class Car extends Vehicle {
 		this.maxDriveSpeed = vehicle.getMaxDriveSpeed();
 	}
 
+	public Car(Vehicle vehicle) {
+		super();
+		this.type = "CAR";
+		this.capacity = vehicle.getCapacity();
+		this.color = vehicle.getColor();
+		this.make = vehicle.getMake();
+		// Cars should always have 4 wheels
+		this.wheels = 4;
+		this.year = vehicle.getYear();
+	}
+
 	public int getMaxDriveSpeed() {
 		return maxDriveSpeed;
 	}

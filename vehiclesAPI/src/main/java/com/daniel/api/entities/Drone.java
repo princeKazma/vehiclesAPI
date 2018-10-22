@@ -26,6 +26,18 @@ public class Drone extends Vehicle {
 		this.hasCamera = vehicle.isHasCamera();
 	}
 
+	public Drone(Vehicle vehicle) {
+		super();
+		this.type = "DRONE";
+		// Drones can't carry humans, yet
+		this.capacity = 0;
+		this.color = vehicle.getColor();
+		this.make = vehicle.getMake();
+		// Flying drones don't need wheels
+		this.wheels = 0;
+		this.year = vehicle.getYear();
+	}
+
 	public int getMaxFlightHeight() {
 		return maxFlightHeight;
 	}

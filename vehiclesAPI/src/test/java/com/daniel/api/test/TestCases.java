@@ -22,13 +22,15 @@ import net.minidev.json.JSONObject;
 @ContextConfiguration(classes = Config.class, loader = AnnotationConfigWebContextLoader.class)
 @WebAppConfiguration
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@Ignore public class TestCases {
+@Ignore("Comment this and Run as JUnit Test after deployment") 
+public class TestCases {
 	
 	private final String BASE_URI = "http://localhost:8080/vehiclesAPI/vehicles";
 	
-	
-	// Test that H2 database gets empty created initially and find empty list of vehicles
-	// when retrieving all vehicles, with retrieved custom 404 status
+	/**
+	 * Test that H2 database gets empty created initially and find empty list of vehicles
+	 *  when retrieving all vehicles, with retrieved custom 404 status
+	 */
 	@Test
 	public void test1_initialEmptyVehicles() {
 		RestAssured.baseURI = BASE_URI;
@@ -42,7 +44,9 @@ import net.minidev.json.JSONObject;
 		Assert.assertEquals( "Vehicles not found", bodyMessage);
 	}
 
-	// Create a Vehicle of type Car and get an Status of 201
+	/**
+	 * Create a Vehicle of type Car and get an Status of 201
+	 */
 	@Test
 	public void test2_createCarVehicle() {
 		RestAssured.baseURI = BASE_URI;
@@ -64,7 +68,9 @@ import net.minidev.json.JSONObject;
 		Assert.assertEquals(statusCode, 201);
 	}
 
-	// Send an object of Car, and an Id path param of 1, to update the vehicle created before; expect a 200
+	/**
+	 * Send an object of Car, and an Id path param of 1, to update the vehicle created before; expect a 200
+	 */
 	@Test
 	public void test3_updateVehicle() {
 		RestAssured.baseURI = BASE_URI;
@@ -85,7 +91,9 @@ import net.minidev.json.JSONObject;
 		Assert.assertEquals(statusCode, 200);
 	}
 
-	// Create a new Vehicle, this time of type Truck, expect a 201
+	/**
+	 * Create a new Vehicle, this time of type Truck, expect a 201
+	 */
 	@Test
 	public void test4_createTruckVehicle() {
 		RestAssured.baseURI = BASE_URI;
@@ -108,7 +116,9 @@ import net.minidev.json.JSONObject;
 		Assert.assertEquals(statusCode, 201);
 	}
 	
-	// Get all vehicles, check it has a Car and a Truck in the list, and expect a 200
+	/**
+	 * Get all vehicles, check it has a Car and a Truck in the list, and expect a 200
+	 */
 	@Test
 	public void test5_retrieveAllTypeOfVehicles() {
 		RestAssured.baseURI = BASE_URI;
@@ -124,7 +134,9 @@ import net.minidev.json.JSONObject;
 		Assert.assertEquals(bodyAsString.contains("TRUCK"), true);
 	}
 
-	// Delete the last created Truck Vehicle, expect a 200
+	/**
+	 * Delete the last created Truck Vehicle, expect a 200
+	 */
 	@Test
 	public void test6_deleteTruck() {
 		RestAssured.baseURI = BASE_URI;
@@ -136,7 +148,9 @@ import net.minidev.json.JSONObject;
 		Assert.assertEquals(statusCode, 204);
 	}
 
-	// Delete the Car vehicle, found by Id param, expect a 200
+	/**
+	 * Delete the Car vehicle, found by Id param, expect a 200
+	 */
 	@Test
 	public void test7_deleteCar() {
 		RestAssured.baseURI = BASE_URI;

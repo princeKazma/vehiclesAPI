@@ -25,6 +25,17 @@ public class Boat extends Vehicle {
 		this.hasSails = vehicle.isHasSails();
 	}
 
+	public Boat(Vehicle vehicle) {
+		super();
+		this.type = "BOAT";
+		this.capacity = vehicle.getCapacity();
+		this.color = vehicle.getColor();
+		this.make = vehicle.getMake();
+		// Boats don't need wheels
+		this.wheels = 0;
+		this.year = vehicle.getYear();
+	}
+
 	public boolean isHasEngine() {
 		return hasEngine;
 	}

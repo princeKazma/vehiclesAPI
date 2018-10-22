@@ -22,6 +22,16 @@ public class Amphibious extends Vehicle {
 		this.canDive = vehicle.isCanDive();
 	}
 
+	public Amphibious(Vehicle vehicle) {
+		super();
+		this.type = "AMPHIBIOUS";
+		this.capacity = vehicle.getCapacity();
+		this.color = vehicle.getColor();
+		this.make = vehicle.getMake();
+		this.wheels = vehicle.getWheels();
+		this.year = vehicle.getYear();
+	}
+
 	public boolean isCanDive() {
 		return canDive;
 	}

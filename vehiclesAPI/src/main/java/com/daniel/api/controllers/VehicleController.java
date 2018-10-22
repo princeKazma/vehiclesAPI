@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.daniel.api.repo.VehicleRepository;
+import com.daniel.api.services.VehicleService;
 import com.daniel.api.entities.Airplane;
 import com.daniel.api.entities.Amphibious;
 import com.daniel.api.entities.Boat;
@@ -23,268 +23,111 @@ import com.daniel.api.entities.Car;
 import com.daniel.api.entities.Drone;
 import com.daniel.api.entities.Truck;
 import com.daniel.api.entities.Vehicle;
-import com.daniel.api.handlers.NotFoundException;
 
 @RestController
 public class VehicleController {
 
 	@Autowired
-	private VehicleRepository vehicleRepo;
+	private VehicleService vehicleService;
 
 	@GetMapping("/vehicles")
 	public ResponseEntity<List<Vehicle>> retrieveVehicles(){
-		List<Vehicle> vehicles = vehicleRepo.findAll();
-		
-		if(vehicles.isEmpty()){
-            throw new NotFoundException("Vehicles not found");
-        }
-		
-        return new ResponseEntity<List<Vehicle>>(vehicles, HttpStatus.OK);
+		return new ResponseEntity<List<Vehicle>>(vehicleService.retrieveAllVehicles(), HttpStatus.OK);
 	}
 
 	@GetMapping("/vehicles/car")
 	public ResponseEntity<List<Vehicle>> retrieveCars(){
-		List<Vehicle> vehicles = vehicleRepo.findByType("CAR");
-		
-		if(vehicles.isEmpty()){
-            throw new NotFoundException("Cars not found");
-        }
-		
-        return new ResponseEntity<List<Vehicle>>(vehicles, HttpStatus.OK);
+		return new ResponseEntity<List<Vehicle>>(vehicleService.retrieveCars(), HttpStatus.OK);
 	}
 
 	@GetMapping("/vehicles/truck")
 	public ResponseEntity<List<Vehicle>> retrieveTrucks(){
-		List<Vehicle> vehicles = vehicleRepo.findByType("TRUCK");
-		
-		if(vehicles.isEmpty()){
-            throw new NotFoundException("Trucks not found");
-        }
-		
-        return new ResponseEntity<List<Vehicle>>(vehicles, HttpStatus.OK);
+		return new ResponseEntity<List<Vehicle>>(vehicleService.retrieveTrucks(), HttpStatus.OK);
 	}
 
 	@GetMapping("/vehicles/airplane")
-	public ResponseEntity<List<Vehicle>> retrieveAirplane(){
-		List<Vehicle> vehicles = vehicleRepo.findByType("AIRPLANE");
-		
-		if(vehicles.isEmpty()){
-            throw new NotFoundException("Airplanes not found");
-        }
-		
-        return new ResponseEntity<List<Vehicle>>(vehicles, HttpStatus.OK);
+	public ResponseEntity<List<Vehicle>> retrieveAirplanes(){
+		return new ResponseEntity<List<Vehicle>>(vehicleService.retrieveAirplanes(), HttpStatus.OK);
 	}
 
 	@GetMapping("/vehicles/drone")
 	public ResponseEntity<List<Vehicle>> retrieveDrones(){
-		List<Vehicle> vehicles = vehicleRepo.findByType("DRONE");
-		
-		if(vehicles.isEmpty()){
-            throw new NotFoundException("Drones not found");
-        }
-		
-        return new ResponseEntity<List<Vehicle>>(vehicles, HttpStatus.OK);
+		return new ResponseEntity<List<Vehicle>>(vehicleService.retrieveDrones(), HttpStatus.OK);
 	}
 
 	@GetMapping("/vehicles/boat")
-	public ResponseEntity<List<Vehicle>> retrieveBoat(){
-		List<Vehicle> vehicles = vehicleRepo.findByType("BOAT");
-		
-		if(vehicles.isEmpty()){
-            throw new NotFoundException("Boats not found");
-        }
-		
-        return new ResponseEntity<List<Vehicle>>(vehicles, HttpStatus.OK);
+	public ResponseEntity<List<Vehicle>> retrieveBoats(){
+		return new ResponseEntity<List<Vehicle>>(vehicleService.retrieveBoats(), HttpStatus.OK);
 	}
 
 	@GetMapping("/vehicles/amph")
 	public ResponseEntity<List<Vehicle>> retrieveAmphibiouses(){
-		List<Vehicle> vehicles = vehicleRepo.findByType("AMPHIBIOUS");
-		
-		if(vehicles.isEmpty()){
-            throw new NotFoundException("Amphibiouses not found");
-        }
-		
-        return new ResponseEntity<List<Vehicle>>(vehicles, HttpStatus.OK);
+		return new ResponseEntity<List<Vehicle>>(vehicleService.retrieveAmphibiouses(), HttpStatus.OK);
 	}
 
 	@GetMapping("/vehicles/{id}")
 	public ResponseEntity<Vehicle> retrieveVehicle(@PathVariable("id") long id){
-		Vehicle foundVehicle = vehicleRepo.findById(id);
-        
-        if (foundVehicle == null) {
-            throw new NotFoundException("Vehicle not found");
-        }
- 
-        return new ResponseEntity<Vehicle>(foundVehicle, HttpStatus.OK);
+		return new ResponseEntity<Vehicle>(vehicleService.retrieveVehicle(id), HttpStatus.OK);
 	}
 
 	@GetMapping("/vehicles/search")
-	public ResponseEntity<List<Vehicle>> retrieveVehiclesByMake(
+	public ResponseEntity<List<Vehicle>> searchVehicles(
 			@RequestParam(value = "make", required = false) String make, 
 			@RequestParam(value = "year", required = false) Integer year, 
 			@RequestParam(value = "type", required = false) String type){
-		List<Vehicle> vehicles = null;
-		if(make != null && year != null) {
-			Vehicle foundVehicle = vehicleRepo.findByMakeAndYear(make, year);
-			if(foundVehicle != null) {
-				vehicles = new ArrayList<Vehicle>();
-				vehicles.add(foundVehicle);
-			}
-		}else if(make != null) {
-			if(type != null) {
-				vehicles  = vehicleRepo.findByMakeAndType(make,type);
-			} else {
-				vehicles  = vehicleRepo.findByMake(make);
-			}
-		} else if(year != null) {
-			if(type != null) {
-				vehicles  = vehicleRepo.findByYearAndType(year,type);
-			} else {
-				vehicles  = vehicleRepo.findByYear(year);
-			}
-		}else if(type != null) {
-			vehicles = vehicleRepo.findByType(type);
-		}
-		
-        
-        if (vehicles == null || vehicles.isEmpty()) {
-            throw new NotFoundException("Vehicles not found");
-        }
- 
-        return new ResponseEntity<List<Vehicle>>(vehicles, HttpStatus.OK);
+		return new ResponseEntity<List<Vehicle>>(vehicleService.searchVehicles(make, year, type), HttpStatus.OK);
 	}
 
 	@GetMapping("/vehicles/last")
 	public ResponseEntity<Vehicle> retrieveLastVehicle(){
-		Vehicle foundVehicle = vehicleRepo.findTopByOrderByIdDesc();
-        
-        if (foundVehicle == null) {
-            throw new NotFoundException("Vehicle not found");
-        }
- 
-        return new ResponseEntity<Vehicle>(foundVehicle, HttpStatus.OK);
+		return new ResponseEntity<Vehicle>(vehicleService.retrieveLastVehicle(), HttpStatus.OK);
 	}
 	
 	@PostMapping("/vehicles/car")
 	public ResponseEntity<Vehicle> createVehicle(@RequestBody Car car) {
-		Vehicle vehicle = new Car(car);
-		Vehicle foundVehicle = vehicleRepo.findByMakeAndYear(vehicle.getMake(), vehicle.getYear());
-		
-		if (foundVehicle != null) {
-            throw new RuntimeException("Car already exists");
-        }
-		vehicleRepo.save(vehicle);
- 
-        return new ResponseEntity<Vehicle>(vehicle, HttpStatus.CREATED);
+		return new ResponseEntity<Vehicle>(vehicleService.createVehicle(car), HttpStatus.CREATED);
 	}
 
 	@PostMapping("/vehicles/truck")
 	public ResponseEntity<Vehicle> createVehicle(@RequestBody Truck truck) {
-		Vehicle vehicle = new Truck(truck);
-		Vehicle foundVehicle = vehicleRepo.findByMakeAndYear(vehicle.getMake(), vehicle.getYear());
-		
-		if (foundVehicle != null) {
-            throw new RuntimeException("Truck already exists");
-        }
-		vehicleRepo.save(vehicle);
- 
-        return new ResponseEntity<Vehicle>(vehicle, HttpStatus.CREATED);
+		return new ResponseEntity<Vehicle>(vehicleService.createVehicle(truck), HttpStatus.CREATED);
 	}
 
 	@PostMapping("/vehicles/airplane")
 	public ResponseEntity<Vehicle> createVehicle(@RequestBody Airplane airplane) {
-		Vehicle vehicle = new Airplane(airplane);
-		Vehicle foundVehicle = vehicleRepo.findByMakeAndYear(vehicle.getMake(), vehicle.getYear());
-		
-		if (foundVehicle != null) {
-            throw new RuntimeException("Airplane already exists");
-        }
-		vehicleRepo.save(vehicle);
- 
-        return new ResponseEntity<Vehicle>(vehicle, HttpStatus.CREATED);
+		return new ResponseEntity<Vehicle>(vehicleService.createVehicle(airplane), HttpStatus.CREATED);
 	}
 
 	@PostMapping("/vehicles/drone")
 	public ResponseEntity<Vehicle> createVehicle(@RequestBody Drone drone) {
-		Vehicle vehicle = new Drone(drone);
-		Vehicle foundVehicle = vehicleRepo.findByMakeAndYear(vehicle.getMake(), vehicle.getYear());
-		
-		if (foundVehicle != null) {
-            throw new RuntimeException("Drone already exists");
-        }
-		vehicleRepo.save(vehicle);
- 
-        return new ResponseEntity<Vehicle>(vehicle, HttpStatus.CREATED);
+		return new ResponseEntity<Vehicle>(vehicleService.createVehicle(drone), HttpStatus.CREATED);
 	}
 
 	@PostMapping("/vehicles/boat")
 	public ResponseEntity<Vehicle> createVehicle(@RequestBody Boat boat) {
-		Vehicle vehicle = new Boat(boat);
-		Vehicle foundVehicle = vehicleRepo.findByMakeAndYear(vehicle.getMake(), vehicle.getYear());
-		
-		if (foundVehicle != null) {
-            throw new RuntimeException("Boat already exists");
-        }
-		vehicleRepo.save(vehicle);
- 
-        return new ResponseEntity<Vehicle>(vehicle, HttpStatus.CREATED);
+		return new ResponseEntity<Vehicle>(vehicleService.createVehicle(boat), HttpStatus.CREATED);
 	}
 
 	@PostMapping("/vehicles/amph")
 	public ResponseEntity<Vehicle> createVehicle(@RequestBody Amphibious amph) {
-		Vehicle vehicle = new Amphibious(amph);
-		Vehicle foundVehicle = vehicleRepo.findByMakeAndYear(vehicle.getMake(), vehicle.getYear());
-		
-		if (foundVehicle != null) {
-            throw new RuntimeException("Amphibious already exists");
-        }
-		vehicleRepo.save(vehicle);
- 
-        return new ResponseEntity<Vehicle>(vehicle, HttpStatus.CREATED);
+		return new ResponseEntity<Vehicle>(vehicleService.createVehicle(amph), HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/vehicles/{id}")
 	public ResponseEntity<Vehicle> updateVehicle(@PathVariable("id") long id, @RequestBody Vehicle vehicle) {
-		Vehicle foundVehicle = vehicleRepo.findById(id);
-         
-        if (foundVehicle == null) {
-            throw new NotFoundException("Vehicle not found");
-        }
- 
-        foundVehicle.setCapacity(vehicle.getCapacity());
-        foundVehicle.setColor(vehicle.getColor());
-        foundVehicle.setMake(vehicle.getMake());
-        foundVehicle.setWheels(vehicle.getWheels());
-        foundVehicle.setYear(vehicle.getYear());
-         
-        vehicleRepo.save(foundVehicle);
-        return new ResponseEntity<Vehicle>(foundVehicle, HttpStatus.OK);
+		return new ResponseEntity<Vehicle>(vehicleService.updateVehicle(id, vehicle), HttpStatus.OK);
     }
 	
 	@DeleteMapping("/vehicles/{id}")
-	public ResponseEntity<Vehicle> deleteVehicle(@PathVariable("id") long id) {
-		Vehicle foundVehicle = vehicleRepo.findById(id);
-        
-        if (foundVehicle == null) {
-            throw new NotFoundException("Vehicle not found");
-        }
- 
-        vehicleRepo.deleteById(id);
-        return new ResponseEntity<Vehicle>(HttpStatus.NO_CONTENT);
+	public ResponseEntity<Object> deleteVehicle(@PathVariable("id") long id) {
+		vehicleService.deleteVehicle(id);
+        return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
     }
 
 	@DeleteMapping("/vehicles/last")
-	public ResponseEntity<Vehicle> deleteLastVehicle(){
-		Vehicle foundVehicle = vehicleRepo.findTopByOrderByIdDesc();
-        
-        if (foundVehicle == null) {
-            throw new NotFoundException("Vehicle not found");
-        }
-
-        vehicleRepo.delete(foundVehicle);
-        return new ResponseEntity<Vehicle>(HttpStatus.NO_CONTENT);
+	public ResponseEntity<Object> deleteLastVehicle(){
+		vehicleService.deleteLastVehicle();
+        return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 	}
-	
 	
 }

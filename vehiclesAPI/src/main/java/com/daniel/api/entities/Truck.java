@@ -25,6 +25,17 @@ public class Truck extends Vehicle {
 		this.maxDriveSpeed = vehicle.getMaxDriveSpeed();
 	}
 
+	public Truck(Vehicle vehicle) {
+		super();
+		this.type = "TRUCK";
+		this.capacity = vehicle.getCapacity();
+		this.color = vehicle.getColor();
+		this.make = vehicle.getMake();
+		// Truck should always have 4 wheels
+		this.wheels = 4;
+		this.year = vehicle.getYear();
+	}
+
 	public int getMaxCarryWeight() {
 		return maxCarryWeight;
 	}
